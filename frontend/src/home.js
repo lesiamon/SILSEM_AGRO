@@ -56,23 +56,26 @@ const useStyles = makeStyles((theme) => ({
   resultCard: {
     height: 400,
     overflow: "auto",
-    padding: theme.spacing(4),
+    padding: theme.spacing(3),
     display: "flex",
     flexDirection: "column",
-    justifyContent: "center",
+    justifyContent: "flex-start",
   },
   confidenceText: {
     color: theme.palette.success.main,
     fontWeight: 800,
     fontSize: "1.4rem",
-    marginTop: theme.spacing(2),
+    marginTop: theme.spacing(1),
   },
   gptFeedback: {
     background: "linear-gradient(145deg, #f8f9fa 0%, #ffffff 100%)",
     borderRadius: 10,
     padding: theme.spacing(2),
-    marginTop: theme.spacing(2),
+    marginTop: theme.spacing(1),
     boxShadow: "0 4px 12px rgba(0, 0, 0, 0.05)",
+    maxHeight: 280,
+    overflowY: "auto",
+    border: "1px solid #e2e8f0",
   },
   clearButton: {
     marginTop: theme.spacing(4),
@@ -167,6 +170,56 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// ------------------- FORMATTED FEEDBACK COMPONENT -------------------
+const FormattedFeedback = ({ text }) => {
+  if (!text) return null;
+  const lines = text.split("\n");
+  return (
+    <Box textAlign="left" style={{ lineHeight: 1.6, fontSize: "0.88rem", color: "#2d3748" }}>
+      {lines.map((line, idx) => {
+        const trimmed = line.trim();
+        if (!trimmed) {
+          return <Box key={idx} style={{ height: 6 }} />;
+        }
+        if (trimmed.startsWith("### ")) {
+          return (
+            <Typography key={idx} variant="subtitle2" style={{ fontWeight: 800, color: "#1a365d", marginTop: 8, marginBottom: 4 }}>
+              {trimmed.replace("### ", "")}
+            </Typography>
+          );
+        }
+        if (trimmed.startsWith("**") && trimmed.endsWith("**")) {
+          return (
+            <Typography key={idx} variant="body2" style={{ fontWeight: 700, color: "#2c5282", marginTop: 6, marginBottom: 2 }}>
+              {trimmed.replace(/\*\*/g, "")}
+            </Typography>
+          );
+        }
+        if (trimmed.startsWith("- ") || trimmed.startsWith("* ")) {
+          return (
+            <Typography key={idx} variant="body2" style={{ marginLeft: 8, marginBottom: 3, display: "flex", alignItems: "flex-start", fontSize: "0.85rem" }}>
+              <span style={{ marginRight: 6, color: "#3182ce" }}>•</span>
+              <span>{trimmed.substring(2).replace(/\*\*(.*?)\*\*/g, "$1")}</span>
+            </Typography>
+          );
+        }
+        if (/^\d+\.\s/.test(trimmed)) {
+          return (
+            <Typography key={idx} variant="body2" style={{ marginLeft: 8, marginBottom: 3, fontSize: "0.85rem" }}>
+              {trimmed.replace(/\*\*(.*?)\*\*/g, "$1")}
+            </Typography>
+          );
+        }
+        return (
+          <Typography key={idx} variant="body2" style={{ marginBottom: 4, fontSize: "0.85rem" }}>
+            {trimmed.replace(/\*\*(.*?)\*\*/g, "$1")}
+          </Typography>
+        );
+      })}
+    </Box>
+  );
+};
+
 // ------------------- COMPONENT -------------------
 export const ImageUpload = () => {
   const classes = useStyles();
@@ -177,6 +230,7 @@ export const ImageUpload = () => {
   const [preview, setPreview] = useState(null);
   const [data, setData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState(null);
   const [activeIndex, setActiveIndex] = useState(0);
   const videoRef = useRef(null);
 
@@ -213,6 +267,7 @@ export const ImageUpload = () => {
     if (files.length > 0) {
       const file = files[0];
       setSelectedFile(file);
+      setErrorMessage(null);
       const reader = new FileReader();
       reader.onloadend = () => {
         setPreview(reader.result);
@@ -225,38 +280,33 @@ export const ImageUpload = () => {
   // Send file to backend
   const sendFile = async (file) => {
     setIsLoading(true);
+    setErrorMessage(null);
     let formData = new FormData();
     formData.append("file", file);
 
     try {
-      console.log("Uploading file to:", process.env.REACT_APP_API_URL || "http://localhost:8000/predict");
+      const apiUrl = process.env.REACT_APP_API_URL || "http://localhost:8000/predict";
+      console.log("Uploading file to:", apiUrl);
       
       let response = await axios.post(
-        process.env.REACT_APP_API_URL || "http://localhost:8000/predict",
+        apiUrl,
         formData,
         {
           headers: {
             "Content-Type": "multipart/form-data",
           },
-          timeout: 30000, // 30 second timeout
+          timeout: 45000,
         }
       );
       
       console.log("Upload successful:", response.data);
-      if (response.status === 200) {
+      if (response.status === 200 && response.data) {
         setData(response.data);
       }
     } catch (error) {
-      console.error("File upload failed:", error.response?.status, error.message);
-      if (error.response) {
-        console.error("Error details:", error.response.data);
-      } else if (error.request) {
-        console.error("No response from server. Is the backend running on http://localhost:8000?");
-      } else {
-        console.error("Error details:", error.message);
-      }
-      // Optionally show user-friendly error message
-      alert(`Upload failed: ${error.message}. Check console for details.`);
+      console.error("File upload failed:", error);
+      const errMsg = error.response?.data?.error || error.message || "Failed to analyze leaf image. Ensure backend is running.";
+      setErrorMessage(errMsg);
     }
     setIsLoading(false);
   };
@@ -266,6 +316,7 @@ export const ImageUpload = () => {
     setSelectedFile(null);
     setPreview(null);
     setData(null);
+    setErrorMessage(null);
   };
 
   return (
@@ -332,54 +383,116 @@ export const ImageUpload = () => {
               {isLoading ? (
                 <Box
                   display="flex"
+                  flexDirection="column"
                   justifyContent="center"
                   alignItems="center"
                   height="100%"
                 >
                   <CircularProgress size={60} style={{ color: "#2c5364" }} />
+                  <Typography variant="body2" style={{ marginTop: 16, color: "#666" }}>
+                    Analyzing leaf pathology...
+                  </Typography>
+                </Box>
+              ) : errorMessage ? (
+                <Box textAlign="center" p={2} my="auto">
+                  <Typography variant="h6" color="error" gutterBottom>
+                    Analysis Failed
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    {errorMessage}
+                  </Typography>
                 </Box>
               ) : data ? (
                 <Fade in={true}>
-                  <div>
-                    <Typography variant="h4" className={classes.resultTitle}>
-                      Confidences prediction
+                  <Box textAlign="center" pt={1}>
+                    <Typography variant="h5" className={classes.resultTitle}>
+                      Diagnosis & Confidence
                     </Typography>
-                    <Typography variant="h5" style={{ color: "#203a43" }}>
-                      {data.class}
-                    </Typography>
+                    <Box
+                      my={2}
+                      py={1}
+                      px={2.5}
+                      borderRadius={16}
+                      style={{
+                        backgroundColor:
+                          data.class === "Healthy"
+                            ? "#e8f5e9"
+                            : data.class === "Late Blight"
+                            ? "#ffebee"
+                            : "#fff3e0",
+                        display: "inline-block",
+                        border: `1.5px solid ${
+                          data.class === "Healthy"
+                            ? "#4caf50"
+                            : data.class === "Late Blight"
+                            ? "#e53935"
+                            : "#fb8c00"
+                        }`
+                      }}
+                    >
+                      <Typography
+                        variant="h5"
+                        style={{
+                          fontWeight: 700,
+                          color:
+                            data.class === "Healthy"
+                              ? "#2e7d32"
+                              : data.class === "Late Blight"
+                              ? "#c62828"
+                              : "#ef6c00",
+                        }}
+                      >
+                        {data.class}
+                      </Typography>
+                    </Box>
                     <Typography className={classes.confidenceText}>
                       Confidence: {(data.confidence * 100).toFixed(1)}%
                     </Typography>
-                  </div>
+                  </Box>
                 </Fade>
               ) : (
-                <Typography variant="h6" style={{ color: theme.palette.text.secondary }}>
-                  Confidences prediction 
-                </Typography>
+                <Box display="flex" justifyContent="center" alignItems="center" height="100%">
+                  <Typography variant="h6" style={{ color: theme.palette.text.secondary }}>
+                    Diagnosis & Confidence
+                  </Typography>
+                </Box>
               )}
             </Card>
           </Grid>
 
-          {/* GPT Feedback Card */}
+          {/* AI Recommendations Card */}
           <Grid item xs={12} md={4}>
             <Card className={`${classes.card} ${classes.resultCard}`}>
-              {data?.ai_feedback ? (
+              {isLoading ? (
+                <Box
+                  display="flex"
+                  flexDirection="column"
+                  justifyContent="center"
+                  alignItems="center"
+                  height="100%"
+                >
+                  <CircularProgress size={40} style={{ color: "#2c5364" }} />
+                  <Typography variant="body2" style={{ marginTop: 12, color: "#666" }}>
+                    Generating advisory guidance...
+                  </Typography>
+                </Box>
+              ) : data?.ai_feedback ? (
                 <Fade in={true}>
                   <div>
-                    <Typography variant="h4" className={classes.resultTitle}>
-                                   AI Recommendations
+                    <Typography variant="h5" className={classes.resultTitle}>
+                      🌱 AI Recommendations
                     </Typography>
                     <div className={classes.gptFeedback}>
-                      <Typography variant="body" style={{ lineHeight: 0.1, fontSize: 10 }}>
-                        {data.ai_feedback}
-                      </Typography>
+                      <FormattedFeedback text={data.ai_feedback} />
                     </div>
                   </div>
                 </Fade>
               ) : (
-                <Typography variant="h6" style={{ color: theme.palette.text.secondary }}>
-                  AI response
-                </Typography>
+                <Box display="flex" justifyContent="center" alignItems="center" height="100%">
+                  <Typography variant="h6" style={{ color: theme.palette.text.secondary }}>
+                    AI Recommendations
+                  </Typography>
+                </Box>
               )}
             </Card>
           </Grid>
