@@ -1,0 +1,10 @@
+{
+  "description": "A digital platform for agricultural businesses to manage operations, streamline workflows, and access tools that support more efficient farming.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}

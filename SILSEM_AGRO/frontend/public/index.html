@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Lime Farms — Agri-Tech Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,600;0,9..144,700;1,9..144,300&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --forest: #1B4332;
+  --forest-light: #2D6A4F;
+  --lime: #52B788;
+  --lime-bright: #74C69D;
+  --lime-pale: #D8F3DC;
+  --cream: #F6F1E9;
+  --cream-dark: #EDE8DC;
+  --earth: #7C5C3A;
+  --text-dark: #1A2E22;
+  --text-mid: #3D5A47;
+  --text-muted: #6B8C77;
+  --white: #FFFFFF;
+  --card-bg: #FFFFFF;
+  --border: rgba(27,67,50,0.12);
+  --shadow-sm: 0 2px 8px rgba(27,67,50,0.08);
+  --shadow-md: 0 4px 20px rgba(27,67,50,0.12);
+  --shadow-lg: 0 8px 40px rgba(27,67,50,0.16);
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+}
+
+html { scroll-behavior: smooth; }
+body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--cream); color: var(--text-dark); line-height: 1.6; }
+
+/* ══ NAV ══ */
+nav {
+  position: sticky; top: 0; z-index: 200;
+  background: var(--forest); padding: 0 5%;
+  display: flex; align-items: center; justify-content: space-between; height: 64px;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.2);
+}
+.nav-logo { display:flex; align-items:center; gap:10px; text-decoration:none; }
+.nav-logo-icon { width:36px; height:36px; background:var(--lime); border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:20px; }
+.nav-logo-text { font-family:'Fraunces',serif; font-weight:600; font-size:20px; color:var(--white); }
+.nav-logo-text span { color:var(--lime-bright); }
+.nav-links { display:flex; align-items:center; gap:2px; list-style:none; }
+.nav-links a { text-decoration:none; color:rgba(255,255,255,0.75); font-size:14px; font-weight:500; padding:6px 14px; border-radius:var(--radius-sm); transition:all 0.2s; }
+.nav-links a:hover { background:rgba(255,255,255,0.1); color:var(--white); }
+.nav-links a.active { background:var(--lime); color:var(--forest); font-weight:600; }
+.nav-cta { background:var(--lime) !important; color:var(--forest) !important; font-weight:600 !important; padding:8px 18px !important; border-radius:50px !important; }
+
+/* ══ HERO ══ */
+.hero { background:linear-gradient(135deg,var(--forest) 0%,var(--forest-light) 60%,#2D8653 100%); padding:80px 5% 0; overflow:hidden; position:relative; min-height:420px; display:flex; align-items:center; gap:60px; }
+.hero::before { content:''; position:absolute; top:-100px; right:-100px; width:500px; height:500px; border-radius:50%; background:rgba(82,183,136,0.1); pointer-events:none; }
+.hero-text { flex:1; max-width:520px; padding-bottom:60px; }
+.hero-badge { display:inline-flex; align-items:center; gap:6px; background:rgba(82,183,136,0.2); border:1px solid rgba(82,183,136,0.4); color:var(--lime-bright); font-size:12px; font-weight:600; letter-spacing:0.8px; text-transform:uppercase; padding:5px 12px; border-radius:50px; margin-bottom:20px; }
+.hero h1 { font-family:'Fraunces',serif; font-weight:700; font-size:clamp(36px,4vw,54px); color:var(--white); line-height:1.15; margin-bottom:16px; letter-spacing:-0.5px; }
+.hero h1 em { font-style:italic; color:var(--lime-bright); }
+.hero p { font-size:16px; color:rgba(255,255,255,0.7); margin-bottom:32px; max-width:420px; line-height:1.7; }
+.hero-btns { display:flex; gap:12px; flex-wrap:wrap; }
+.btn-primary { background:var(--lime); color:var(--forest); font-weight:600; font-size:14px; padding:12px 24px; border-radius:50px; border:none; cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:6px; transition:all 0.2s; }
+.btn-primary:hover { background:var(--lime-bright); transform:translateY(-1px); box-shadow:0 6px 20px rgba(82,183,136,0.4); }
+.btn-ghost { background:transparent; color:rgba(255,255,255,0.85); font-weight:500; font-size:14px; padding:12px 24px; border-radius:50px; border:1px solid rgba(255,255,255,0.25); cursor:pointer; text-decoration:none; display:inline-flex; align-items:center; gap:6px; transition:all 0.2s; }
+.btn-ghost:hover { background:rgba(255,255,255,0.1); }
+.hero-visual { flex-shrink:0; display:flex; gap:16px; align-items:flex-end; }
+.hero-stat-card { background:rgba(255,255,255,0.08); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.15); border-radius:var(--radius-lg); padding:20px; text-align:center; min-width:120px; transition:transform 0.3s; }
+.hero-stat-card:hover { transform:translateY(-4px); }
+.hero-stat-card .num { font-family:'Fraunces',serif; font-size:32px; font-weight:600; color:var(--lime-bright); display:block; }
+.hero-stat-card .lbl { font-size:12px; color:rgba(255,255,255,0.6); font-weight:500; }
+.hero-main-card { background:rgba(255,255,255,0.1); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.2); border-radius:var(--radius-xl); padding:28px; display:flex; flex-direction:column; align-items:center; gap:12px; min-width:160px; margin-bottom:20px; transition:transform 0.3s; }
+.hero-main-card:hover { transform:translateY(-4px); }
+.hero-main-card .plant-icon { font-size:56px; }
+.hero-main-card .card-title { font-size:13px; font-weight:600; color:var(--white); text-align:center; }
+.hero-main-card .status-badge { background:rgba(82,183,136,0.25); color:var(--lime-bright); font-size:11px; font-weight:600; padding:3px 10px; border-radius:50px; border:1px solid rgba(82,183,136,0.4); }
+
+/* ══ STATS BANNER ══ */
+.stats-banner { background:var(--forest); padding:48px 5%; }
+.stats-inner { display:grid; grid-template-columns:repeat(4,1fr); gap:32px; text-align:center; max-width:900px; margin:0 auto; }
+.stat-item .stat-num { font-family:'Fraunces',serif; font-size:42px; font-weight:700; color:var(--lime-bright); display:block; line-height:1; margin-bottom:6px; }
+.stat-item .stat-label { font-size:13px; color:rgba(255,255,255,0.6); font-weight:500; }
+
+/* ══ SECTIONS ══ */
+.section { padding:64px 5%; }
+.section-alt { background:var(--cream-dark); }
+.section-header { display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:36px; gap:20px; flex-wrap:wrap; }
+.section-tag { display:inline-block; font-size:11px; font-weight:700; letter-spacing:1.2px; text-transform:uppercase; color:var(--lime-bright); background:var(--forest); padding:4px 10px; border-radius:4px; margin-bottom:8px; }
+.section-title { font-family:'Fraunces',serif; font-size:clamp(26px,3vw,36px); font-weight:600; color:var(--text-dark); letter-spacing:-0.3px; line-height:1.2; }
+.section-sub { font-size:14px; color:var(--text-muted); margin-top:6px; max-width:400px; }
+.see-all-link { text-decoration:none; color:var(--forest-light); font-size:13px; font-weight:600; display:flex; align-items:center; gap:4px; white-space:nowrap; transition:gap 0.2s; }
+.see-all-link:hover { gap:8px; color:var(--forest); }
+
+/* ══ AI TOOLS CARDS ══ */
+.ai-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+.ai-card { background:var(--card-bg); border-radius:var(--radius-lg); border:1px solid var(--border); padding:28px; display:flex; flex-direction:column; gap:14px; box-shadow:var(--shadow-sm); transition:all 0.3s; cursor:pointer; text-decoration:none; color:inherit; position:relative; overflow:hidden; }
+.ai-card::after { content:''; position:absolute; bottom:0; left:0; right:0; height:3px; background:var(--lime); transform:scaleX(0); transition:transform 0.3s; transform-origin:left; }
+.ai-card:hover { transform:translateY(-4px); box-shadow:var(--shadow-lg); border-color:rgba(82,183,136,0.3); }
+.ai-card:hover::after { transform:scaleX(1); }
+.ai-card-icon { width:52px; height:52px; border-radius:var(--radius-md); display:flex; align-items:center; justify-content:center; font-size:26px; }
+.ai-card-icon.green { background:var(--lime-pale); }
+.ai-card-icon.amber { background:#FEF3C7; }
+.ai-card-icon.blue  { background:#DBEAFE; }
+.ai-card h3 { font-family:'Fraunces',serif; font-size:17px; font-weight:600; color:var(--text-dark); letter-spacing:-0.2px; }
+.ai-card p  { font-size:13px; color:var(--text-muted); line-height:1.6; flex:1; }
+.ai-card-footer { display:flex; align-items:center; justify-content:space-between; padding-top:12px; border-top:1px solid var(--border); }
+.ai-card-status { font-size:11px; font-weight:600; padding:3px 10px; border-radius:50px; }
+.status-live  { background:#D1FAE5; color:#065F46; }
+.status-ready { background:#DBEAFE; color:#1E40AF; }
+.status-beta  { background:#FEF3C7; color:#92400E; }
+.ai-card-arrow { width:28px; height:28px; border-radius:50%; background:var(--lime-pale); display:flex; align-items:center; justify-content:center; font-size:13px; color:var(--forest); transition:background 0.2s; }
+.ai-card:hover .ai-card-arrow { background:var(--lime); }
+
+/* ══ DISEASE SCANNER SECTION ══ */
+.scanner-wrap { display:grid; grid-template-columns:1fr 1fr; gap:24px; align-items:start; }
+.scan-card { background:var(--card-bg); border-radius:var(--radius-lg); border:1px solid var(--border); padding:28px; box-shadow:var(--shadow-sm); display:flex; flex-direction:column; gap:18px; }
+.scan-card-label { font-size:11px; font-weight:700; letter-spacing:1px; text-transform:uppercase; color:var(--text-muted); }
+
+/* Drop zone */
+.drop-zone { border:2px dashed rgba(27,67,50,0.2); border-radius:16px; min-height:220px; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.25s; background:var(--cream); position:relative; overflow:hidden; }
+.drop-zone.drag-over { border-color:var(--lime); background:var(--lime-pale); transform:scale(1.01); }
+.drop-zone.has-image { border:2px solid rgba(27,67,50,0.15); cursor:default; }
+.drop-placeholder { text-align:center; padding:24px; pointer-events:none; }
+.drop-icon  { font-size:48px; margin-bottom:10px; }
+.drop-title { font-size:16px; font-weight:600; color:var(--text-dark); margin-bottom:4px; }
+.drop-sub   { font-size:13px; color:var(--text-muted); margin-bottom:12px; }
+.drop-formats { display:inline-block; font-size:11px; font-weight:600; color:var(--forest-light); background:var(--lime-pale); padding:3px 10px; border-radius:4px; }
+#preview-img { width:100%; height:100%; object-fit:contain; max-height:280px; border-radius:12px; padding:8px; }
+.remove-btn { position:absolute; top:10px; right:10px; background:rgba(0,0,0,0.55); color:#fff; border:none; border-radius:20px; padding:4px 12px; font-size:12px; font-weight:600; cursor:pointer; z-index:2; }
+
+/* Analyse button */
+.analyse-btn { width:100%; background:var(--forest); color:var(--lime-bright); border:none; border-radius:50px; padding:14px 24px; font-family:'Plus Jakarta Sans',sans-serif; font-size:15px; font-weight:700; cursor:pointer; transition:all 0.2s; letter-spacing:0.3px; }
+.analyse-btn:hover:not(:disabled) { background:var(--forest-light); transform:translateY(-1px); box-shadow:0 6px 20px rgba(27,67,50,0.3); }
+.analyse-btn:disabled { background:#D1D5DB; color:#9CA3AF; cursor:not-allowed; transform:none; box-shadow:none; }
+
+/* Loading bar */
+.loading-bar { height:4px; background:#E5E7EB; border-radius:99px; overflow:hidden; }
+.loading-fill { height:100%; width:45%; background:linear-gradient(90deg,var(--lime),var(--lime-bright)); border-radius:99px; animation:shimmer 1.4s ease infinite; }
+
+/* Tips */
+.tips-box { background:#F0FDF4; border:1px solid rgba(82,183,136,0.25); border-radius:12px; padding:14px 16px; }
+.tips-title { font-size:12px; font-weight:700; color:#2D6A4F; margin-bottom:8px; }
+.tips-list  { padding-left:18px; margin:0; font-size:12px; color:var(--text-mid); line-height:1.9; }
+
+/* Results panel */
+.result-panel-inner { display:flex; flex-direction:column; gap:16px; }
+.empty-state { display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:60px 20px; gap:10px; min-height:320px; }
+.empty-icon  { font-size:52px; }
+.empty-title { font-size:18px; font-weight:700; color:var(--text-dark); }
+.empty-sub   { font-size:13px; color:var(--text-muted); line-height:1.6; max-width:260px; }
+
+/* Result pill */
+.result-pill { display:flex; align-items:center; gap:16px; padding:18px 20px; border-radius:16px; border:1px solid transparent; }
+.conf-box { background:#F9FAFB; border-radius:12px; padding:16px 18px; border:1px solid #E5E7EB; }
+.conf-header { display:flex; justify-content:space-between; align-items:baseline; margin-bottom:10px; }
+.conf-label { font-size:14px; font-weight:600; color:#374151; }
+.conf-value { font-family:'Fraunces',serif; font-size:30px; font-weight:700; }
+.conf-bar-track { height:8px; border-radius:99px; background:#E5E7EB; overflow:hidden; }
+.conf-bar-fill  { height:100%; border-radius:99px; transition:width 0.8s cubic-bezier(.22,1,.36,1); }
+.conf-hint { font-size:12px; color:#9CA3AF; margin-top:6px; }
+
+/* All predictions */
+.all-preds { background:#F9FAFB; border-radius:12px; padding:14px 16px; border:1px solid #E5E7EB; }
+.all-preds-title { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:#6B7280; margin-bottom:10px; }
+.pred-row { display:flex; align-items:center; gap:10px; margin-bottom:8px; }
+.pred-label { font-size:13px; color:#374151; flex:1; }
+.pred-score { font-size:12px; font-weight:700; min-width:42px; text-align:right; }
+.pred-bar-wrap { width:80px; }
+
+/* ══ AI TREATMENT PANEL ══ */
+.treatment-section { background:var(--forest); padding:64px 5%; }
+.treatment-wrap { display:grid; grid-template-columns:1fr 1.4fr; gap:32px; align-items:start; max-width:1100px; margin:0 auto; }
+.treatment-info { color:var(--white); }
+.treatment-tag { display:inline-block; font-size:11px; font-weight:700; letter-spacing:1.2px; text-transform:uppercase; color:var(--forest); background:var(--lime); padding:4px 10px; border-radius:4px; margin-bottom:14px; }
+.treatment-info h2 { font-family:'Fraunces',serif; font-size:clamp(26px,3vw,38px); font-weight:700; line-height:1.2; margin-bottom:12px; letter-spacing:-0.3px; }
+.treatment-info h2 em { color:var(--lime-bright); font-style:italic; }
+.treatment-info p { font-size:14px; color:rgba(255,255,255,0.65); line-height:1.75; margin-bottom:20px; }
+.treatment-features { list-style:none; display:flex; flex-direction:column; gap:10px; }
+.treatment-features li { display:flex; align-items:flex-start; gap:10px; font-size:13px; color:rgba(255,255,255,0.75); }
+.treatment-features li .feat-icon { width:24px; height:24px; border-radius:6px; background:rgba(82,183,136,0.2); display:flex; align-items:center; justify-content:center; font-size:13px; flex-shrink:0; margin-top:1px; }
+
+/* Treatment chat card */
+.treatment-card { background:rgba(255,255,255,0.06); backdrop-filter:blur(12px); border:1px solid rgba(255,255,255,0.15); border-radius:var(--radius-xl); padding:28px; display:flex; flex-direction:column; gap:16px; }
+.treatment-input-row { display:flex; gap:10px; }
+.disease-input { flex:1; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.2); border-radius:50px; padding:11px 18px; font-family:'Plus Jakarta Sans',sans-serif; font-size:14px; color:var(--white); outline:none; transition:border-color 0.2s; }
+.disease-input::placeholder { color:rgba(255,255,255,0.4); }
+.disease-input:focus { border-color:var(--lime); background:rgba(255,255,255,0.14); }
+.treat-btn { background:var(--lime); color:var(--forest); border:none; border-radius:50px; padding:11px 20px; font-family:'Plus Jakarta Sans',sans-serif; font-size:14px; font-weight:700; cursor:pointer; white-space:nowrap; transition:all 0.2s; flex-shrink:0; }
+.treat-btn:hover:not(:disabled) { background:var(--lime-bright); transform:translateY(-1px); }
+.treat-btn:disabled { opacity:0.5; cursor:not-allowed; transform:none; }
+
+/* Treatment output */
+.treatment-output { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:var(--radius-md); padding:20px; min-height:180px; font-size:13.5px; color:rgba(255,255,255,0.85); line-height:1.8; }
+.treatment-placeholder { display:flex; flex-direction:column; align-items:center; justify-content:center; height:180px; text-align:center; gap:8px; color:rgba(255,255,255,0.3); }
+.treatment-placeholder .ph-icon { font-size:36px; opacity:0.4; }
+.treatment-placeholder p { font-size:13px; }
+
+.treat-loading { display:flex; align-items:center; gap:10px; color:var(--lime-bright); font-size:13px; font-weight:600; height:180px; justify-content:center; }
+.treat-dots span { display:inline-block; width:6px; height:6px; border-radius:50%; background:var(--lime-bright); animation:bounce 1.2s ease infinite; }
+.treat-dots span:nth-child(2) { animation-delay:.15s; }
+.treat-dots span:nth-child(3) { animation-delay:.3s; }
+
+/* Treatment result sections */
+.treat-section { margin-bottom:14px; }
+.treat-section:last-child { margin-bottom:0; }
+.treat-section-title { font-size:12px; font-weight:700; text-transform:uppercase; letter-spacing:0.8px; color:var(--lime-bright); margin-bottom:6px; }
+.treat-section-body { font-size:13.5px; color:rgba(255,255,255,0.85); line-height:1.8; }
+.treat-section-body ul { padding-left:18px; }
+.treat-section-body li { margin-bottom:4px; }
+
+.treat-fungicide-chips { display:flex; flex-wrap:wrap; gap:8px; margin-top:8px; }
+.fungicide-chip { background:rgba(82,183,136,0.15); border:1px solid rgba(82,183,136,0.3); color:var(--lime-bright); font-size:12px; font-weight:600; padding:4px 12px; border-radius:50px; }
+
+/* Auto-fill badge when scanning */
+.autofill-badge { display:none; align-items:center; gap:6px; font-size:12px; color:var(--lime-bright); background:rgba(82,183,136,0.1); border:1px solid rgba(82,183,136,0.25); border-radius:8px; padding:6px 12px; }
+.autofill-badge.visible { display:flex; }
+
+/* ══ FUNGICIDE SECTION ══ */
+.fungicide-tabs { display:flex; gap:8px; margin-bottom:28px; border-bottom:1px solid var(--border); }
+.ftab { padding:10px 20px; border-radius:var(--radius-sm) var(--radius-sm) 0 0; border:none; background:transparent; font-family:'Plus Jakarta Sans',sans-serif; font-size:14px; font-weight:500; color:var(--text-muted); cursor:pointer; transition:all 0.2s; border-bottom:2px solid transparent; margin-bottom:-1px; }
+.ftab.active { color:var(--forest); border-bottom-color:var(--lime); font-weight:600; }
+.ftab:hover:not(.active) { color:var(--forest-light); background:var(--lime-pale); }
+.product-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:20px; }
+.product-card { background:var(--card-bg); border-radius:var(--radius-lg); border:1px solid var(--border); overflow:hidden; box-shadow:var(--shadow-sm); transition:all 0.3s; cursor:pointer; }
+.product-card:hover { transform:translateY(-4px); box-shadow:var(--shadow-md); border-color:rgba(82,183,136,0.4); }
+.product-img-wrap { height:140px; background:var(--cream); display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative; }
+.product-img-wrap img { width:100%; height:100%; object-fit:contain; padding:12px; transition:transform 0.3s; }
+.product-card:hover .product-img-wrap img { transform:scale(1.05); }
+.product-img-placeholder { width:70px; height:70px; border-radius:var(--radius-md); background:var(--cream-dark); display:flex; align-items:center; justify-content:center; font-size:32px; }
+.product-badge { position:absolute; top:10px; left:10px; font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; padding:3px 8px; border-radius:4px; }
+.badge-systemic { background:#DBEAFE; color:#1E40AF; }
+.badge-contact  { background:#FEF3C7; color:#92400E; }
+.badge-both     { background:#D1FAE5; color:#065F46; }
+.product-info { padding:14px 16px; }
+.product-name { font-family:'Fraunces',serif; font-size:15px; font-weight:600; color:var(--text-dark); margin-bottom:4px; }
+.product-meta { font-size:11.5px; color:var(--text-muted); line-height:1.5; margin-bottom:10px; }
+.product-meta strong { color:var(--text-mid); font-weight:600; }
+.product-mfr { display:inline-flex; align-items:center; gap:4px; font-size:11px; font-weight:600; color:var(--forest-light); background:var(--lime-pale); padding:3px 8px; border-radius:4px; }
+
+/* ══ EVENTS ══ */
+.events-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:24px; }
+.event-card { background:var(--card-bg); border-radius:var(--radius-lg); border:1px solid var(--border); overflow:hidden; box-shadow:var(--shadow-sm); transition:all 0.3s; display:flex; flex-direction:column; }
+.event-card:hover { transform:translateY(-4px); box-shadow:var(--shadow-md); }
+.event-img { height:160px; background:var(--forest); display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; }
+.event-category-pill { position:absolute; top:14px; left:14px; font-size:10px; font-weight:700; letter-spacing:0.8px; text-transform:uppercase; background:var(--lime); color:var(--forest); padding:4px 10px; border-radius:50px; z-index:2; }
+.event-date-chip { position:absolute; bottom:14px; right:14px; background:rgba(255,255,255,0.15); backdrop-filter:blur(8px); border:1px solid rgba(255,255,255,0.25); border-radius:var(--radius-sm); padding:6px 10px; text-align:center; z-index:2; }
+.event-date-chip .day   { display:block; font-family:'Fraunces',serif; font-size:20px; font-weight:700; color:var(--white); line-height:1; }
+.event-date-chip .month { display:block; font-size:10px; font-weight:600; color:rgba(255,255,255,0.8); text-transform:uppercase; letter-spacing:0.5px; }
+.event-body { padding:18px 20px; flex:1; display:flex; flex-direction:column; }
+.event-title { font-family:'Fraunces',serif; font-size:18px; font-weight:600; color:var(--text-dark); margin-bottom:8px; letter-spacing:-0.2px; line-height:1.3; }
+.event-desc  { font-size:13px; color:var(--text-muted); line-height:1.6; flex:1; margin-bottom:14px; }
+.event-footer { display:flex; align-items:center; justify-content:space-between; padding-top:12px; border-top:1px solid var(--border); }
+.event-location { display:flex; align-items:center; gap:5px; font-size:12px; font-weight:500; color:var(--forest-light); }
+.event-register-btn { font-size:12px; font-weight:600; color:var(--forest); background:var(--lime-pale); border:1px solid rgba(82,183,136,0.3); padding:6px 14px; border-radius:50px; cursor:pointer; text-decoration:none; transition:all 0.2s; }
+.event-register-btn:hover { background:var(--lime); }
+
+/* ══ FOOTER ══ */
+footer { background:var(--text-dark); padding:40px 5% 24px; }
+.footer-inner { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:20px; padding-bottom:24px; border-bottom:1px solid rgba(255,255,255,0.08); margin-bottom:20px; }
+.footer-logo-text { font-family:'Fraunces',serif; font-size:20px; font-weight:600; color:var(--white); }
+.footer-logo-text span { color:var(--lime-bright); }
+.footer-links { display:flex; gap:20px; list-style:none; flex-wrap:wrap; }
+.footer-links a { text-decoration:none; color:rgba(255,255,255,0.5); font-size:13px; transition:color 0.2s; }
+.footer-links a:hover { color:var(--lime-bright); }
+.footer-copy { font-size:12px; color:rgba(255,255,255,0.3); text-align:center; }
+
+/* ══ ANIMATIONS ══ */
+@keyframes fadeUp   { from{opacity:0;transform:translateY(20px)} to{opacity:1;transform:translateY(0)} }
+@keyframes shimmer  { 0%{transform:translateX(-100%)} 100%{transform:translateX(250%)} }
+@keyframes bounce   { 0%,80%,100%{transform:translateY(0)} 40%{transform:translateY(-6px)} }
+@keyframes spin     { to{transform:rotate(360deg)} }
+@keyframes typing   { from{opacity:0} to{opacity:1} }
+
+.fade-up { animation:fadeUp 0.5s ease both; }
+.fade-up:nth-child(2){animation-delay:.1s}
+.fade-up:nth-child(3){animation-delay:.2s}
+
+/* ══ RESPONSIVE ══ */
+@media(max-width:1000px){
+  .scanner-wrap,.treatment-wrap{grid-template-columns:1fr}
+  .ai-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:700px){
+  .nav-links{display:none}
+  .ai-grid{grid-template-columns:1fr}
+  .stats-inner{grid-template-columns:repeat(2,1fr)}
+  .hero-visual{display:none}
+  .hero{padding-bottom:40px}
+  .product-grid{grid-template-columns:repeat(2,1fr)}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════ NAV ═══════════ -->
+<nav>
+  <a href="#" class="nav-logo">
+    <div class="nav-logo-icon">🌿</div>
+    <span class="nav-logo-text">Lime<span>Farms</span></span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#">Home</a></li>
+    <li><a href="#ai-tools">AI Tools</a></li>
+    <li><a href="#scanner" class="active">Scan Crop</a></li>
+    <li><a href="#fungicides">Fungicides</a></li>
+    <li><a href="#events">Events</a></li>
+    <li><a href="#" class="nav-cta">Get Started</a></li>
+  </ul>
+</nav>
+
+<!-- ═══════════ HERO ═══════════ -->
+<section class="hero">
+  <div class="hero-text">
+    <div class="hero-badge">🌱 Agri-Tech Platform</div>
+    <h1>Smart farming for <em>healthier</em> harvests</h1>
+    <p>AI-powered disease detection, fungicide recommendations, and the latest agri-tech events — all in one platform built for Kenyan farmers.</p>
+    <div class="hero-btns">
+      <a href="#scanner" class="btn-primary">Scan Your Crop →</a>
+      <a href="#fungicides" class="btn-ghost">Browse Fungicides</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <div style="display:flex;flex-direction:column;gap:16px;">
+      <div class="hero-stat-card"><span class="num">97%</span><span class="lbl">Detection Accuracy</span></div>
+      <div class="hero-stat-card"><span class="num">40+</span><span class="lbl">Fungicide Products</span></div>
+    </div>
+    <div class="hero-main-card">
+      <div class="plant-icon">🌿</div>
+      <div class="card-title">AI Disease Scanner</div>
+      <div class="status-badge">● Live</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ STATS ═══════════ -->
+<div class="stats-banner">
+  <div class="stats-inner">
+    <div class="stat-item"><span class="stat-num">12K+</span><span class="stat-label">Farmers helped</span></div>
+    <div class="stat-item"><span class="stat-num">40+</span><span class="stat-label">Fungicide products</span></div>
+    <div class="stat-item"><span class="stat-num">97%</span><span class="stat-label">AI accuracy</span></div>
+    <div class="stat-item"><span class="stat-num">5</span><span class="stat-label">Upcoming events</span></div>
+  </div>
+</div>
+
+<!-- ═══════════ AI TOOLS ═══════════ -->
+<section class="section" id="ai-tools">
+  <div class="section-header">
+    <div>
+      <div class="section-tag">AI Features</div>
+      <h2 class="section-title">Powered by machine learning</h2>
+      <p class="section-sub">Three intelligent tools to protect your crops from disease.</p>
+    </div>
+    <a href="#scanner" class="see-all-link">Try the scanner →</a>
+  </div>
+  <div class="ai-grid">
+    <a href="#scanner" class="ai-card fade-up">
+      <div class="ai-card-icon green">🌱</div>
+      <h3>Disease Detection</h3>
+      <p>Upload a leaf photo and get instant identification of blights, molds, and infections with confidence scores.</p>
+      <div class="ai-card-footer"><span class="ai-card-status status-live">● Live</span><div class="ai-card-arrow">→</div></div>
+    </a>
+    <a href="#scanner" class="ai-card fade-up">
+      <div class="ai-card-icon amber">📊</div>
+      <h3>Confidence Prediction</h3>
+      <p>See detailed probability scores across multiple disease categories to help inform your treatment decision.</p>
+      <div class="ai-card-footer"><span class="ai-card-status status-ready">● Ready</span><div class="ai-card-arrow">→</div></div>
+    </a>
+    <a href="#treatment" class="ai-card fade-up">
+      <div class="ai-card-icon blue">🤖</div>
+      <h3>AI Treatment Plan</h3>
+      <p>Get a personalised treatment plan, fungicide recommendations, and prevention tips generated by AI for your specific diagnosis.</p>
+      <div class="ai-card-footer"><span class="ai-card-status status-live">● Live</span><div class="ai-card-arrow">→</div></div>
+    </a>
+  </div>
+</section>
+
+<!-- ═══════════ DISEASE SCANNER ═══════════ -->
+<section class="section section-alt" id="scanner">
+  <div class="section-header">
+    <div>
+      <div class="section-tag">Step 1 — Diagnose</div>
+      <h2 class="section-title">Scan your crop</h2>
+      <p class="section-sub">Upload a photo of an affected leaf. Our ML model detects the disease instantly.</p>
+    </div>
+  </div>
+
+  <div class="scanner-wrap">
+    <!-- LEFT: Upload -->
+    <div class="scan-card">
+      <p class="scan-card-label">📸 Upload crop photo</p>
+
+      <div class="drop-zone" id="drop-zone">
+        <div class="drop-placeholder" id="drop-placeholder">
+          <div class="drop-icon">🌱</div>
+          <p class="drop-title">Drag &amp; drop a photo here</p>
+          <p class="drop-sub">or click to browse your files</p>
+          <div class="drop-formats">JPG · PNG · WEBP · up to 10 MB</div>
+        </div>
+        <img id="preview-img" style="display:none;" alt="Preview" />
+        <button class="remove-btn" id="remove-btn" style="display:none;" onclick="resetScan(event)">✕ Remove</button>
+      </div>
+      <input type="file" id="file-input" accept="image/*" style="display:none;" />
+
+      <button class="analyse-btn" id="analyse-btn" disabled onclick="analyseCrop()">🔍 Analyse Disease</button>
+      <div class="loading-bar" id="loading-bar" style="display:none;"><div class="loading-fill"></div></div>
+
+      <div class="tips-box">
+        <p class="tips-title">📋 Tips for best results</p>
+        <ul class="tips-list">
+          <li>Use natural daylight — avoid harsh shadows</li>
+          <li>Focus on the affected leaf or stem area</li>
+          <li>Capture the whole leaf if possible</li>
+          <li>Avoid blurry or very dark images</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- RIGHT: Results -->
+    <div class="scan-card" id="result-panel">
+      <p class="scan-card-label">🧬 Detection results</p>
+      <div id="result-content">
+        <div class="empty-state">
+          <div class="empty-icon">🔬</div>
+          <p class="empty-title">No scan yet</p>
+          <p class="empty-sub">Upload a photo and click <strong>Analyse Disease</strong> to see your results here.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ AI TREATMENT ═══════════ -->
+<section class="treatment-section" id="treatment">
+  <div class="treatment-wrap">
+
+    <!-- LEFT: Info -->
+    <div class="treatment-info">
+      <div class="treatment-tag">Step 2 — Treat</div>
+      <h2>Get your <em>AI treatment</em> plan</h2>
+      <p>Once you have a diagnosis, our AI generates a detailed, crop-specific treatment protocol — including fungicide options, application schedule, and prevention strategies.</p>
+      <ul class="treatment-features">
+        <li><div class="feat-icon">💊</div>Recommended fungicide products with dosage</li>
+        <li><div class="feat-icon">📅</div>Application timing and schedule</li>
+        <li><div class="feat-icon">🛡️</div>Preventive measures to stop re-infection</li>
+        <li><div class="feat-icon">⚠️</div>Severity assessment and urgency level</li>
+        <li><div class="feat-icon">🌦️</div>Environmental factors to consider</li>
+      </ul>
+    </div>
+
+    <!-- RIGHT: Treatment chat -->
+    <div class="treatment-card">
+      <p style="font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:rgba(255,255,255,0.4);">🤖 AI Treatment Generator</p>
+
+      <div class="autofill-badge" id="autofill-badge">
+        <span>✓</span> Disease auto-filled from your scan
+      </div>
+
+      <div class="treatment-input-row">
+        <input
+          class="disease-input"
+          id="disease-input"
+          type="text"
+          placeholder="Enter disease name, e.g. Early Blight…"
+        />
+        <button class="treat-btn" id="treat-btn" onclick="getTreatment()">Get Plan</button>
+      </div>
+
+      <div class="treatment-output" id="treatment-output">
+        <div class="treatment-placeholder">
+          <div class="ph-icon">🌿</div>
+          <p>Enter a disease name above and click <strong>Get Plan</strong> to generate a full treatment protocol.</p>
+        </div>
+      </div>
+
+      <p style="font-size:11px;color:rgba(255,255,255,0.3);text-align:center;">
+        Powered by Claude AI · Always consult a local agronomist for critical decisions
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FUNGICIDES ═══════════ -->
+<section class="section" id="fungicides">
+  <div class="section-header">
+    <div>
+      <div class="section-tag">Product Catalogue</div>
+      <h2 class="section-title">Recommended fungicides</h2>
+      <p class="section-sub">Trusted treatments from leading agri manufacturers.</p>
+    </div>
+    <a href="#" class="see-all-link">View all →</a>
+  </div>
+
+  <div class="fungicide-tabs">
+    <button class="ftab active" onclick="switchTab(this,'early')">Early Blight</button>
+    <button class="ftab" onclick="switchTab(this,'late')">Late Blight</button>
+  </div>
+
+  <div id="tab-early" class="product-grid">
+    <div class="product-card fade-up"><div class="product-img-wrap"><div class="product-img-placeholder">🧪</div><span class="product-badge badge-systemic">Systemic</span></div><div class="product-info"><div class="product-name">Azoxystrobin</div><div class="product-meta"><strong>Active:</strong> Azoxystrobin<br/><strong>Mode:</strong> Systemic</div><span class="product-mfr">🏭 Syngenta</span></div></div>
+    <div class="product-card fade-up"><div class="product-img-wrap"><div class="product-img-placeholder">🟢</div><span class="product-badge badge-systemic">Systemic</span></div><div class="product-info"><div class="product-name">Difenoconazole</div><div class="product-meta"><strong>Active:</strong> Difenoconazole<br/><strong>Mode:</strong> Systemic</div><span class="product-mfr">🏭 Corteva</span></div></div>
+    <div class="product-card fade-up"><div class="product-img-wrap"><div class="product-img-placeholder">🔵</div><span class="product-badge badge-contact">Contact</span></div><div class="product-info"><div class="product-name">Mancozeb</div><div class="product-meta"><strong>Active:</strong> Mancozeb<br/><strong>Mode:</strong> Contact</div><span class="product-mfr">🏭 BASF</span></div></div>
+    <div class="product-card fade-up"><div class="product-img-wrap"><div class="product-img-placeholder">🟤</div><span class="product-badge badge-contact">Contact</span></div><div class="product-info"><div class="product-name">Copper Hydroxide</div><div class="product-meta"><strong>Active:</strong> Copper Hydroxide<br/><strong>Mode:</strong> Contact</div><span class="product-mfr">🏭 Syngenta</span></div></div>
+    <div class="product-card fade-up"><div class="product-img-wrap"><div class="product-img-placeholder">⚗️</div><span class="product-badge badge-contact">Contact</span></div><div class="product-info"><div class="product-name">Chlorothalonil</div><div class="product-meta"><strong>Active:</strong> Chlorothalonil<br/><strong>Mode:</strong> Contact</div><span class="product-mfr">🏭 Syngenta</span></div></div>
+  </div>
+
+  <div id="tab-late" class="product-grid" style="display:none;">
+    <div class="product-card fade-up"><div class="product-img-wrap"><div class="product-img-placeholder">🧫</div><span class="product-badge badge-both">Systemic & Contact</span></div><div class="product-info"><div class="product-name">Metalaxyl + Mancozeb</div><div class="product-meta"><strong>Active:</strong> Metalaxyl 9%, Mancozeb 64%<br/><strong>Mode:</strong> Systemic & Contact</div><span class="product-mfr">🏭 FMC</span></div></div>
+    <div class="product-card fade-up"><div class="product-img-wrap"><div class="product-img-placeholder">🌀</div><span class="product-badge badge-both">Systemic & Contact</span></div><div class="product-info"><div class="product-name">Fluopicolide + Propamocarb</div><div class="product-meta"><strong>Active:</strong> Fluopicolide, Propamocarb<br/><strong>Mode:</strong> Systemic & Contact</div><span class="product-mfr">🏭 Bayer</span></div></div>
+    <div class="product-card fade-up"><div class="product-img-wrap"><div class="product-img-placeholder">🧬</div><span class="product-badge badge-both">Systemic & Contact</span></div><div class="product-info"><div class="product-name">Cymoxanil + Mancozeb</div><div class="product-meta"><strong>Active:</strong> Cymoxanil, Mancozeb<br/><strong>Mode:</strong> Systemic & Contact</div><span class="product-mfr">🏭 Adama</span></div></div>
+    <div class="product-card fade-up"><div class="product-img-wrap"><div class="product-img-placeholder">💊</div><span class="product-badge badge-systemic">Systemic</span></div><div class="product-info"><div class="product-name">Mandipropamid</div><div class="product-meta"><strong>Active:</strong> Mandipropamid<br/><strong>Mode:</strong> Systemic</div><span class="product-mfr">🏭 Syngenta</span></div></div>
+    <div class="product-card fade-up"><div class="product-img-wrap"><div class="product-img-placeholder">🔬</div><span class="product-badge badge-systemic">Systemic</span></div><div class="product-info"><div class="product-name">Dimethomorph</div><div class="product-meta"><strong>Active:</strong> Dimethomorph<br/><strong>Mode:</strong> Systemic</div><span class="product-mfr">🏭 BASF</span></div></div>
+  </div>
+</section>
+
+<!-- ═══════════ EVENTS ═══════════ -->
+<section class="section section-alt" id="events">
+  <div class="section-header">
+    <div>
+      <div class="section-tag">Events</div>
+      <h2 class="section-title">Upcoming events</h2>
+      <p class="section-sub">Stay connected with the agri-tech community across Kenya.</p>
+    </div>
+    <a href="#" class="see-all-link">View all →</a>
+  </div>
+  <div class="events-grid">
+    <div class="event-card">
+      <div class="event-img" style="background:#1B4332;">
+        <span class="event-category-pill">Investment</span>
+        <div class="event-date-chip"><span class="day">25</span><span class="month">May 2025</span></div>
+        <div style="position:absolute;inset:0;background:linear-gradient(135deg,#1B4332 0%,#2D6A4F 100%);opacity:0.9;"></div>
+        <div style="position:relative;z-index:2;color:white;padding:20px;"><div style="font-size:28px;font-family:serif;font-weight:700;letter-spacing:2px;opacity:0.9;">RIZON</div><div style="font-size:11px;opacity:0.6;letter-spacing:1px;margin-top:2px;">2025</div></div>
+      </div>
+      <div class="event-body"><h3 class="event-title">RIZON 2025 — Agriculture Investment Summit</h3><p class="event-desc">Resilience, Sustainability & Unlocking Investments for Agri-Tech businesses across East Africa.</p><div class="event-footer"><span class="event-location">📍 Nairobi, Kenya</span><a href="#" class="event-register-btn">Register →</a></div></div>
+    </div>
+    <div class="event-card">
+      <div class="event-img">
+        <span class="event-category-pill">Climate</span>
+        <div class="event-date-chip"><span class="day">23</span><span class="month">May 2025</span></div>
+        <div style="position:absolute;inset:0;background:linear-gradient(135deg,#185A9D 0%,#43CEA2 100%);opacity:0.8;"></div>
+        <div style="position:relative;z-index:2;color:white;padding:20px;"><div style="font-size:18px;font-family:serif;font-weight:700;">Climate Change<br/>& Agriculture</div></div>
+      </div>
+      <div class="event-body"><h3 class="event-title">Climate Change Management in Agriculture</h3><p class="event-desc">A forum addressing how Kenyan farmers can adapt farming practices in the face of climate disruption.</p><div class="event-footer"><span class="event-location">📍 Nairobi, Kenya</span><a href="#" class="event-register-btn">Register →</a></div></div>
+    </div>
+    <div class="event-card">
+      <div class="event-img">
+        <span class="event-category-pill" style="background:#FEF3C7;color:#92400E;">Disaster</span>
+        <div class="event-date-chip"><span class="day">12</span><span class="month">Jun 2025</span></div>
+        <div style="position:absolute;inset:0;background:linear-gradient(135deg,#7B3F00 0%,#C68642 100%);opacity:0.8;"></div>
+        <div style="position:relative;z-index:2;color:white;padding:20px;"><div style="font-size:18px;font-family:serif;font-weight:700;">Disaster<br/>Management</div></div>
+      </div>
+      <div class="event-body"><h3 class="event-title">Disaster Management for Agri-Tech Businesses</h3><p class="event-desc">Practical strategies for crop loss mitigation, insurance, and crisis response for agri enterprises.</p><div class="event-footer"><span class="event-location">📍 Nairobi, Kenya</span><a href="#" class="event-register-btn">Register →</a></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FOOTER ═══════════ -->
+<footer>
+  <div class="footer-inner">
+    <span class="footer-logo-text">Lime<span>Farms</span></span>
+    <ul class="footer-links">
+      <li><a href="#">Home</a></li>
+      <li><a href="#ai-tools">AI Tools</a></li>
+      <li><a href="#scanner">Scan Crop</a></li>
+      <li><a href="#fungicides">Fungicides</a></li>
+      <li><a href="#events">Events</a></li>
+    </ul>
+  </div>
+  <p class="footer-copy">© 2026 Lime Farms. All rights reserved. Built for Kenyan farmers 🌿</p>
+</footer>
+
+<!-- ═══════════ JAVASCRIPT ═══════════ -->
+<script>
+// ── Severity map ──────────────────────────────────────────────────────────────
+const SEVERITY = {
+  "early blight":       { level:"moderate", color:"#D97706", bg:"#FEF3C7", icon:"⚠️" },
+  "late blight":        { level:"severe",   color:"#DC2626", bg:"#FEE2E2", icon:"🚨" },
+  "healthy":            { level:"healthy",  color:"#059669", bg:"#D1FAE5", icon:"✅" },
+  "leaf mold":          { level:"moderate", color:"#D97706", bg:"#FEF3C7", icon:"⚠️" },
+  "septoria leaf spot": { level:"moderate", color:"#D97706", bg:"#FEF3C7", icon:"⚠️" },
+  "target spot":        { level:"severe",   color:"#DC2626", bg:"#FEE2E2", icon:"🚨" },
+  "mosaic virus":       { level:"severe",   color:"#DC2626", bg:"#FEE2E2", icon:"🚨" },
+  "yellow leaf curl":   { level:"severe",   color:"#DC2626", bg:"#FEE2E2", icon:"🚨" },
+};
+function getSev(label=""){return SEVERITY[label.toLowerCase()]||{level:"unknown",color:"#6B7280",bg:"#F3F4F6",icon:"🔬"};}
+
+// ── Drop zone setup ───────────────────────────────────────────────────────────
+const dropZone    = document.getElementById('drop-zone');
+const fileInput   = document.getElementById('file-input');
+const previewImg  = document.getElementById('preview-img');
+const removeBtnEl = document.getElementById('remove-btn');
+const placeholder = document.getElementById('drop-placeholder');
+const analyseBtn  = document.getElementById('analyse-btn');
+let   currentFile = null;
+
+dropZone.addEventListener('click', () => { if(!currentFile) fileInput.click(); });
+dropZone.addEventListener('dragover',  e=>{ e.preventDefault(); dropZone.classList.add('drag-over'); });
+dropZone.addEventListener('dragleave', ()=> dropZone.classList.remove('drag-over'));
+dropZone.addEventListener('drop', e=>{ e.preventDefault(); dropZone.classList.remove('drag-over'); handleFile(e.dataTransfer.files[0]); });
+fileInput.addEventListener('change', e=> handleFile(e.target.files[0]));
+
+function handleFile(f){
+  if(!f||!f.type.startsWith('image/')){ alert('Please upload a valid image (JPG, PNG, WEBP).'); return; }
+  currentFile = f;
+  const reader = new FileReader();
+  reader.onload = e=>{
+    previewImg.src = e.target.result;
+    previewImg.style.display = 'block';
+    placeholder.style.display = 'none';
+    removeBtnEl.style.display = 'block';
+    dropZone.classList.add('has-image');
+    analyseBtn.disabled = false;
+  };
+  reader.readAsDataURL(f);
+}
+
+function resetScan(e){
+  if(e) e.stopPropagation();
+  currentFile = null;
+  previewImg.style.display='none';
+  placeholder.style.display='block';
+  removeBtnEl.style.display='none';
+  dropZone.classList.remove('has-image','drag-over');
+  analyseBtn.disabled=true;
+  fileInput.value='';
+  document.getElementById('result-content').innerHTML=`
+    <div class="empty-state">
+      <div class="empty-icon">🔬</div>
+      <p class="empty-title">No scan yet</p>
+      <p class="empty-sub">Upload a photo and click <strong>Analyse Disease</strong> to see your results here.</p>
+    </div>`;
+  document.getElementById('loading-bar').style.display='none';
+}
+
+// ── Analyse crop via ML backend ───────────────────────────────────────────────
+async function analyseCrop(){
+  if(!currentFile) return;
+  analyseBtn.disabled=true;
+  analyseBtn.textContent='⟳ Analysing…';
+  document.getElementById('loading-bar').style.display='block';
+  document.getElementById('result-content').innerHTML=`
+    <div class="empty-state">
+      <div style="font-size:48px;animation:spin 1.2s linear infinite">⚙️</div>
+      <p class="empty-title">Scanning your crop…</p>
+      <p class="empty-sub">Running image through the disease model</p>
+    </div>`;
+
+  try{
+    const body = new FormData();
+    body.append('image', currentFile);
+    const res  = await fetch('/api/predict',{method:'POST',body});
+    if(!res.ok) throw new Error(`Server error ${res.status}`);
+    const data = await res.json();
+
+    const disease    = data.disease    ?? data.label      ?? data.prediction  ?? 'Unknown';
+    const confidence = parseFloat(data.confidence ?? data.score ?? data.probability ?? 0).toFixed(1);
+    const allPreds   = data.all_predictions ?? data.predictions ?? null;
+    const sev        = getSev(disease);
+
+    let predsHtml = '';
+    if(allPreds && allPreds.length){
+      const rows = allPreds.sort((a,b)=>b.score-a.score).slice(0,5).map(p=>{
+        const ps = getSev(p.label);
+        return `<div class="pred-row">
+          <span class="pred-label">${p.label}</span>
+          <span class="pred-score" style="color:${ps.color}">${parseFloat(p.score).toFixed(1)}%</span>
+          <div class="pred-bar-wrap"><div class="conf-bar-track"><div class="conf-bar-fill" style="width:${Math.min(100,p.score)}%;background:${ps.color}"></div></div></div>
+        </div>`;
+      }).join('');
+      predsHtml=`<div class="all-preds"><p class="all-preds-title">All predictions</p>${rows}</div>`;
+    }
+
+    const confHint = parseFloat(confidence)>=85
+      ? 'High confidence — result is reliable.'
+      : parseFloat(confidence)>=60
+      ? 'Moderate confidence — consider a second scan.'
+      : 'Low confidence — try a clearer, well-lit photo.';
+
+    document.getElementById('result-content').innerHTML=`
+      <div class="result-panel-inner">
+        <div class="result-pill" style="background:${sev.bg};border-color:${sev.color}44">
+          <span style="font-size:32px">${sev.icon}</span>
+          <div>
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:${sev.color};margin-bottom:3px">${sev.level}</div>
+            <div style="font-size:20px;font-weight:700;color:#1A2E22;font-family:'Fraunces',serif">${disease}</div>
+          </div>
+        </div>
+        <div class="conf-box">
+          <div class="conf-header">
+            <span class="conf-label">Confidence score</span>
+            <span class="conf-value" style="color:${sev.color}">${confidence}%</span>
+          </div>
+          <div class="conf-bar-track"><div class="conf-bar-fill" style="width:${Math.min(100,parseFloat(confidence))}%;background:${sev.color}"></div></div>
+          <p class="conf-hint">${confHint}</p>
+        </div>
+        ${predsHtml}
+        <div style="background:#F0FDF4;border:1px solid rgba(82,183,136,0.3);border-radius:12px;padding:14px 16px;">
+          <p style="font-size:13px;font-weight:700;color:#065F46;margin-bottom:8px;">Next step</p>
+          <p style="font-size:13px;color:#047857;line-height:1.6;">Scroll down to the <strong>AI Treatment Plan</strong> section — your diagnosis has been auto-filled for you.</p>
+          <a href="#treatment" style="display:inline-block;margin-top:10px;font-size:13px;font-weight:700;color:#1B4332;text-decoration:none;background:var(--lime-pale);padding:7px 16px;border-radius:50px;border:1px solid rgba(82,183,136,0.3);">Get AI Treatment Plan →</a>
+        </div>
+      </div>`;
+
+    // Auto-fill treatment input
+    document.getElementById('disease-input').value = disease;
+    document.getElementById('autofill-badge').classList.add('visible');
+
+  }catch(err){
+    document.getElementById('result-content').innerHTML=`
+      <div class="empty-state" style="background:#FEF2F2;border-radius:12px;padding:24px;">
+        <div style="font-size:40px">❌</div>
+        <p class="empty-title" style="color:#DC2626">Detection failed</p>
+        <p class="empty-sub" style="color:#B91C1C">${err.message}</p>
+        <button onclick="resetScan()" style="margin-top:12px;background:#FEE2E2;border:1px solid #FCA5A5;border-radius:50px;padding:8px 20px;font-size:13px;font-weight:600;color:#DC2626;cursor:pointer;">Try again</button>
+      </div>`;
+  }finally{
+    analyseBtn.textContent='🔍 Analyse Disease';
+    analyseBtn.disabled=false;
+    document.getElementById('loading-bar').style.display='none';
+  }
+}
+
+// ── AI Treatment via Claude API ───────────────────────────────────────────────
+async function getTreatment(){
+  const disease = document.getElementById('disease-input').value.trim();
+  if(!disease){ document.getElementById('disease-input').focus(); return; }
+
+  const treatBtn = document.getElementById('treat-btn');
+  treatBtn.disabled=true;
+  treatBtn.textContent='Generating…';
+
+  document.getElementById('treatment-output').innerHTML=`
+    <div class="treat-loading">
+      <div class="treat-dots"><span></span><span></span><span></span></div>
+      <span>Generating treatment plan for <strong>${disease}</strong>…</span>
+    </div>`;
+
+  try{
+    const res = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1000,
+        system:`You are an expert agronomist specialising in crop disease management in East Africa, particularly Kenya. 
+Provide concise, practical treatment advice. Always respond with ONLY a JSON object — no markdown, no preamble.
+Format:
+{
+  "severity": "low|moderate|severe",
+  "overview": "1-2 sentence summary of the disease and urgency",
+  "immediate_actions": ["action 1", "action 2", "action 3"],
+  "fungicides": ["Product Name (active ingredient)", "..."],
+  "application": "How and when to apply the fungicide",
+  "prevention": ["prevention tip 1", "prevention tip 2", "prevention tip 3"],
+  "consult_expert": true|false
+}`,
+        messages:[{role:'user',content:`Provide a treatment plan for a crop diagnosed with: ${disease}`}]
+      })
+    });
+
+    const data = await res.json();
+    const raw  = data.content?.find(b=>b.type==='text')?.text || '{}';
+    let plan;
+    try{ plan = JSON.parse(raw.replace(/```json|```/g,'').trim()); }
+    catch{ throw new Error('Could not parse AI response. Please try again.'); }
+
+    const sevColor = plan.severity==='severe'?'#DC2626':plan.severity==='moderate'?'#D97706':'#059669';
+    const sevBg    = plan.severity==='severe'?'#FEE2E2':plan.severity==='moderate'?'#FEF3C7':'#D1FAE5';
+
+    const fungicideChips = (plan.fungicides||[]).map(f=>`<span class="fungicide-chip">${f}</span>`).join('');
+    const immediateList  = (plan.immediate_actions||[]).map(a=>`<li>${a}</li>`).join('');
+    const preventList    = (plan.prevention||[]).map(p=>`<li>${p}</li>`).join('');
+
+    document.getElementById('treatment-output').innerHTML=`
+      <div style="display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:10px;background:${sevBg};border:1px solid ${sevColor}33;margin-bottom:14px">
+        <span style="font-size:20px">${plan.severity==='severe'?'🚨':plan.severity==='moderate'?'⚠️':'✅'}</span>
+        <div>
+          <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.8px;color:${sevColor}">${plan.severity||'unknown'} severity</div>
+          <div style="font-size:13px;color:#1A2E22;font-weight:500;margin-top:2px">${plan.overview||''}</div>
+        </div>
+      </div>
+      <div class="treat-section">
+        <div class="treat-section-title">⚡ Immediate actions</div>
+        <div class="treat-section-body"><ul>${immediateList}</ul></div>
+      </div>
+      <div class="treat-section">
+        <div class="treat-section-title">💊 Recommended fungicides</div>
+        <div class="treat-fungicide-chips">${fungicideChips}</div>
+      </div>
+      <div class="treat-section">
+        <div class="treat-section-title">🗓️ Application guide</div>
+        <div class="treat-section-body">${plan.application||''}</div>
+      </div>
+      <div class="treat-section">
+        <div class="treat-section-title">🛡️ Prevention</div>
+        <div class="treat-section-body"><ul>${preventList}</ul></div>
+      </div>
+      ${plan.consult_expert?`<div style="background:rgba(220,38,38,0.1);border:1px solid rgba(220,38,38,0.3);border-radius:8px;padding:10px 14px;font-size:12px;color:#FCA5A5;margin-top:4px">⚠️ This case warrants consultation with a local agronomist or extension officer.</div>`:''}`;
+
+  }catch(err){
+    document.getElementById('treatment-output').innerHTML=`
+      <div style="color:#FCA5A5;font-size:13px;text-align:center;padding:40px 20px;">
+        ❌ ${err.message}<br/><br/>
+        <button onclick="getTreatment()" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:white;padding:8px 20px;border-radius:50px;font-size:13px;cursor:pointer;">Try again</button>
+      </div>`;
+  }finally{
+    treatBtn.disabled=false;
+    treatBtn.textContent='Get Plan';
+  }
+}
+
+// ── Fungicide tabs ────────────────────────────────────────────────────────────
+function switchTab(btn, tab){
+  document.querySelectorAll('.ftab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-early').style.display = tab==='early'?'grid':'none';
+  document.getElementById('tab-late').style.display  = tab==='late' ?'grid':'none';
+}
+
+// Allow Enter key in disease input
+document.getElementById('disease-input').addEventListener('keydown', e=>{ if(e.key==='Enter') getTreatment(); });
+</script>
+</body>
+</html>
